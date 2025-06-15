@@ -1,0 +1,44 @@
+---
+- name: Zabezpieczanie serwisu sshd
+  hosts: centos
+  vars:
+    sciezka: /etc/ssh/sshd_config
+  tasks:
+    - name: Zabezpieczenie logowania na konto root
+      lineinfile:
+        path: "{{ sciezka }}"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+      notify: restart_sshd
+    - name: Blokada logowania haslem
+      lineinfile:
+        path: "{{ sciezka }}"
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+      notify: restart_sshd
+
+    - name: Zmiana polityki SELinux na porcie 2222
+      seport:
+        ports: 2222
+        proto: tcp
+        state: present
+        setype: ssh_port_t
+
+    - name: Zmiana portu na 2222
+      lineinfile:
+        path: "{{ sciezka }}"
+        line: "Port 2222"
+      notify: restart_sshd
+
+    - name: Konfiguracja firewalla
+      firewalld:
+        port: 2222/tcp
+        immediate: yes
+        permanent: yes
+        state: enabled
+
+  handlers:
+    - name: restart_sshd
+      systemd:
+        name: sshd
+        state: restarted
