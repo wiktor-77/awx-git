@@ -1,0 +1,8 @@
+---
+- name: Next playbook in workload
+  hosts: localhost
+  tasks:
+    - name: Good task
+      debug:
+        msg: "Good playbook in new workload"
+

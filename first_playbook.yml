@@ -1,0 +1,7 @@
+---
+- name: First playbook in workload
+  hosts: localhost
+  tasks:
+    - name: First task
+      debug:
+        msg: "First playbook in new workload"

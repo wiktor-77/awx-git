@@ -1,0 +1,8 @@
+---
+- name: Failure playbook in workload
+  hosts: localhost
+  tasks:
+    - name: Failure task
+      debug:
+        msaaag: "Failure playbook in new workload"
+
