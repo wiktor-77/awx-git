@@ -1,6 +1,6 @@
 ---
 - name: Test
-  hosts: all
+  hosts: localhost
   tasks:
     - name: Test
       debug:
